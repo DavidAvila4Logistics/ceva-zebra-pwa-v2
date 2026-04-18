@@ -296,7 +296,10 @@
       font-weight: 700;
       color: var(--color-text);
       margin-bottom: var(--space-1);
+      /* Ensure visible in both light and dark mode */
+      opacity: 1;
     }
+    [data-theme="light"] .info-banner h3 { color: #0a1628; }
     .info-banner p {
       font-size: var(--text-xs);
       color: var(--color-text-muted);
@@ -742,12 +745,14 @@
     @media (max-width: 600px) {
       .main-content { padding: var(--space-4) var(--space-3); }
       .section-body { padding: var(--space-3) var(--space-4); }
-      .section-header { padding: var(--space-3) var(--space-4); }
+      .section-header { padding: var(--space-3) var(--space-4); flex-wrap: wrap; gap: var(--space-2); }
+      .section-badge { font-size: 10px; padding: 2px 6px; white-space: nowrap; }
       .status-row { grid-template-columns: 1fr; }
       .actions-row { flex-direction: column; }
       .btn-lg { padding: var(--space-4) var(--space-6); }
       .header-subtitle { display: none; }
       .toast-container { left: var(--space-3); right: var(--space-3); max-width: none; }
+      .section-title { font-size: var(--text-xs); }
     }
 
     /* ===== HIDDEN ===== */
