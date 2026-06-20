@@ -4,16 +4,18 @@
  * Compatible con GitHub Pages (sin backend).
  */
 
-const CACHE_NAME = 'ceva-zebra-v2-cache-v1';
+const CACHE_NAME = 'ceva-zebra-v2-cache-v3';
 
 // Assets to pre-cache on install
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './ceva-logo.jpg',
-  './icon-192.png',
-  './icon-512.png',
+  './assets/css/styles.css',
+  './assets/js/app.js',
+  './assets/img/ceva-logo.jpg',
+  './assets/img/icon-192.png',
+  './assets/img/icon-512.png',
   // CDN libraries are NOT pre-cached (they come from external hosts)
   // The app still works offline for UI but needs network for CDN libs first load
 ];

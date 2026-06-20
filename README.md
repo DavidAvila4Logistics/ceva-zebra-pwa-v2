@@ -131,14 +131,36 @@ Ce.xlsx/JSON ─┘── loadCe() → Localidad → Ruta
 
 ```
 ceva-zebra-pwa-v2/
-├── index.html       # App completa (HTML + CSS + JS inline, sin build step)
-├── manifest.json    # PWA Manifest
-├── sw.js            # Service Worker (cache-first)
-├── ceva-logo.jpg    # Logo CEVA Logistics
-├── icon-192.png     # PWA icon 192x192
-├── icon-512.png     # PWA icon 512x512
-└── README.md        # Este archivo
+├── index.html            # Estructura HTML de la app
+├── manifest.json         # PWA Manifest (raíz, requerido)
+├── sw.js                 # Service Worker — cache-first (raíz: scope PWA)
+├── .gitignore
+├── README.md             # Este archivo
+├── assets/
+│   ├── css/
+│   │   └── styles.css    # Estilos (design tokens + componentes)
+│   ├── js/
+│   │   └── app.js        # Lógica de la app (carga, cruce, export XLSX)
+│   └── img/
+│       ├── ceva-logo.jpg # Logo CEVA Logistics
+│       ├── icon-192.png  # PWA icon 192x192
+│       └── icon-512.png  # PWA icon 512x512
+└── docs/
+    ├── ESTADO_PROYECTO.md   # Estado del proyecto / checklist a producción
+    └── samples/             # Datos MOCK (ficticios) para probar la app
+        ├── HR_MOCK.xlsx
+        ├── IMPRESOS_MOCK_4501_lista.xlsx … 4504
+        ├── Ce_MOCK.xlsx
+        └── zebra_MOCK_esperado.xlsx   # Salida esperada con esos mocks (24 etiquetas)
 ```
+
+> **Datos de prueba:** `docs/samples/` contiene únicamente datos **ficticios (MOCK)** — no hay
+> información real de clientes. El `.gitignore` versiona solo los archivos `*MOCK*`; cualquier
+> archivo real (HR/IMPRESOS/Ce) que dejes ahí para probar queda ignorado y no se sube al repo.
+
+> **Nota:** `sw.js` y `manifest.json` se mantienen en la raíz a propósito — el Service Worker
+> necesita estar en la raíz para que su *scope* (`./`) cubra toda la app. El CSS y el JS viven
+> en `assets/` pero la app sigue **sin build step**: el navegador carga los archivos directamente.
 
 ---
 

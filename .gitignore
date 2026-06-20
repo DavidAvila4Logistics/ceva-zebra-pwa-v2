@@ -1,0 +1,37 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs y temporales
+*.log
+*.tmp
+tmp/
+
+# Dependencias (no se usan hoy, pero por si se agregan)
+node_modules/
+
+# ==========================================================================
+# Datos de prueba (docs/samples)
+# Solo se versionan los archivos MOCK (datos ficticios, sin info real de
+# clientes). Cualquier HR / IMPRESOS / Ce / zebra REAL que dejes en esa
+# carpeta para probar queda IGNORADO y no se sube al repo.
+# ==========================================================================
+docs/samples/*.xlsx
+docs/samples/*.json
+docs/samples/*.csv
+docs/samples/*.pdf
+!docs/samples/*MOCK*.xlsx
+!docs/samples/*MOCK*.json
+
+# Salidas generadas por la app al probar
+CEVA_Zebra_Etiquetas_*.xlsx
+
+# Documento interno de estado del proyecto: no se publica en el repo
+docs/ESTADO_PROYECTO.md
