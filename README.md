@@ -17,16 +17,16 @@ PWA estática 100% client-side para generar el archivo de control de Handling Un
 
 ## Diferencias respecto a v1
 
-| Aspecto | v1 (Node.js + Express) | v2 (Estática) |
-|---|---|---|
-| **Backend** | Express.js en Node.js | Ninguno — 100% browser |
-| **Instalación** | `npm install` + `.bat` scripts | Solo abrir el HTML |
-| **HR input** | PDF (parsing regex) o XLSX | **Solo XLSX** (recomendado) |
-| **PDF support** | Sí (pdf-parse en server) | No (limitación de GitHub Pages) |
-| **Deploy** | Servidor propio / VPS | GitHub Pages / cualquier hosting estático |
-| **Persistencia** | Sesiones en RAM del servidor | Sin estado — procesamiento en memoria del browser |
-| **Offline** | No (requería server activo) | Sí (PWA con Service Worker, tras primera carga) |
-| **Instalable** | No como PWA estándar | Sí — installable en Zebra y móviles |
+| Aspecto          | v1 (Node.js + Express)         | v2 (Estática)                                     |
+| ---------------- | ------------------------------ | ------------------------------------------------- |
+| **Backend**      | Express.js en Node.js          | Ninguno — 100% browser                            |
+| **Instalación**  | `npm install` + `.bat` scripts | Solo abrir el HTML                                |
+| **HR input**     | PDF (parsing regex) o XLSX     | **Solo XLSX** (recomendado)                       |
+| **PDF support**  | Sí (pdf-parse en server)       | No (limitación de GitHub Pages)                   |
+| **Deploy**       | Servidor propio / VPS          | GitHub Pages / cualquier hosting estático         |
+| **Persistencia** | Sesiones en RAM del servidor   | Sin estado — procesamiento en memoria del browser |
+| **Offline**      | No (requería server activo)    | Sí (PWA con Service Worker, tras primera carga)   |
+| **Instalable**   | No como PWA estándar           | Sí — installable en Zebra y móviles               |
 
 ---
 
@@ -67,17 +67,22 @@ el PDF en Excel y guardarlo como .xlsx antes de cargarlo en esta app.
 ## Formato de archivos de entrada
 
 ### HR XLSX
+
 Columnas requeridas (detección flexible, sin importar mayúsculas/tildes):
+
 - `Nº Factura` (o `Nro Factura`, `Num Factura`, etc.)
 - `Destinatario`
 - `Ciudad Destinatario`
 
 ### Impresos XLSX
+
 Columnas requeridas:
+
 - `Remito` (o `Referencia`)
 - `Handling Unit` (o `HU`, `Unidad`)
 
 ### Ce.xlsx / Ce.json
+
 - **Excel**: Primera hoja con columnas `Localidad` y `Ruta`
 - **JSON**: Array de objetos `[{"localidad": "CORDOBA", "ruta": "R1"}]`
 
@@ -159,7 +164,7 @@ ceva-zebra-pwa-v2/
 > archivo real (HR/IMPRESOS/Ce) que dejes ahí para probar queda ignorado y no se sube al repo.
 
 > **Nota:** `sw.js` y `manifest.json` se mantienen en la raíz a propósito — el Service Worker
-> necesita estar en la raíz para que su *scope* (`./`) cubra toda la app. El CSS y el JS viven
+> necesita estar en la raíz para que su _scope_ (`./`) cubra toda la app. El CSS y el JS viven
 > en `assets/` pero la app sigue **sin build step**: el navegador carga los archivos directamente.
 
 ---
@@ -174,4 +179,4 @@ ceva-zebra-pwa-v2/
 
 ---
 
-*CEVA Logistics — Control de Etiquetas Zebra v2 · Desarrollado para uso interno*
+_CEVA Logistics — Control de Etiquetas Zebra v2 · Desarrollado para uso interno_

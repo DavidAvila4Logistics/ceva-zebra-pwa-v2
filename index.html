@@ -1,286 +1,604 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es-AR" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="CEVA Zebra v2 — Generador de etiquetas logísticas 100% browser. Sin backend, compatible con GitHub Pages." />
-  <meta name="theme-color" content="#003087" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="CEVA Zebra" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="CEVA Zebra v2 — Generador de etiquetas logísticas 100% browser. Sin backend, compatible con GitHub Pages."
+    />
+    <meta name="theme-color" content="#003087" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CEVA Zebra" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="CEVA Zebra PWA v2" />
-  <meta property="og:description" content="Control de etiquetas logísticas — 100% client-side" />
-  <meta property="og:type" content="website" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="CEVA Zebra PWA v2" />
+    <meta property="og:description" content="Control de etiquetas logísticas — 100% client-side" />
+    <meta property="og:type" content="website" />
 
-  <title>CEVA Zebra v2 — Control de Etiquetas</title>
+    <title>CEVA Zebra v2 — Control de Etiquetas</title>
 
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="apple-touch-icon" href="./assets/img/icon-192.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/icon-192.png" />
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./assets/img/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/icon-192.png" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- SheetJS (XLSX) via CDN -->
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- SheetJS (XLSX) via CDN -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 
-  <link rel="stylesheet" href="./assets/css/styles.css" />
-</head>
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
 
-<body>
-  <div class="app-wrapper">
-
-    <!-- PWA Install Bar -->
-    <div class="install-bar" id="install-bar">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v13m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-      <span>Instalar CEVA Zebra en este dispositivo</span>
-      <button class="btn btn-accent" id="btn-install">Instalar App</button>
-      <button class="btn-icon" id="btn-dismiss-install" style="color:rgba(255,255,255,0.6);" aria-label="Cerrar">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-
-    <!-- Header -->
-    <header class="app-header" role="banner">
-      <div class="header-inner">
-        <div class="header-brand">
-          <img class="header-logo" src="./assets/img/ceva-logo.jpg" alt="CEVA Logistics" />
-          <div class="header-title-group">
-            <span class="header-title">Tercer PASO</span>
-            <span class="header-subtitle">Creación de archivo para ZEBRA</span>
-          </div>
-        </div>
-        <div class="header-actions">
-          <span class="header-badge">v2</span>
-          <button class="btn-icon" id="btn-theme" aria-label="Cambiar tema" data-theme-toggle title="Cambiar tema claro/oscuro">
-            <!-- moon icon (dark mode shown by default) -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main -->
-    <main class="main-content" role="main">
-
-      <!-- Instrucciones v2 -->
-      <div class="info-banner">
-        <div class="info-banner-icon">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        </div>
-        <div>
-          <h3>Cómo usar CEVA Zebra v2 (sin backend, 100% browser)</h3>
-          <p>Esta versión funciona completamente en el navegador — no necesita servidor, Node.js ni scripts .bat.</p>
-          <ul class="info-steps">
-            <li data-n="1.">El <strong>HR recomendado es XLSX</strong>. Exportá el romaneo desde el sistema como Excel antes de cargarlo aquí. (El PDF no está soportado en esta versión estática).</li>
-            <li data-n="2.">Cargá uno o varios archivos <strong>Impresos XLSX</strong> (pueden ser múltiples días).</li>
-            <li data-n="3.">Cargá el archivo <strong>Ce.xlsx o JSON</strong> con la tabla Localidad → Ruta.</li>
-            <li data-n="4.">Presioná <strong>Procesar</strong> — el resultado se descarga automáticamente como XLSX.</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Status row -->
-      <div class="status-row">
-        <div class="status-card">
-          <span class="status-label">HR (XLSX)</span>
-          <span class="status-value required-missing" id="status-hr">Sin archivo</span>
-        </div>
-        <div class="status-card">
-          <span class="status-label">Impresos</span>
-          <span class="status-value required-missing" id="status-impresos">Sin archivos</span>
-        </div>
-        <div class="status-card">
-          <span class="status-label">Ce / Rutas</span>
-          <span class="status-value" id="status-ce" style="color:var(--color-warning)">Opcional</span>
-        </div>
-      </div>
-
-      <!-- HR Upload -->
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-title">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            HR — Hoja de Ruta
-          </div>
-          <span class="section-badge required">Requerido · XLSX</span>
-        </div>
-        <div class="section-body">
-          <div class="drop-zone" id="dz-hr" role="button" tabindex="0" aria-label="Cargar archivo HR">
-            <input type="file" id="file-hr" accept=".xlsx,.xls" aria-label="Seleccionar HR XLSX" />
-            <svg class="drop-zone-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            <span class="drop-zone-label">Click o arrastrar HR.xlsx aquí</span>
-            <span class="drop-zone-hint">Solo XLSX · Máx 50MB · Esta v2 no soporta PDF (ver instrucciones arriba)</span>
-          </div>
-          <div class="file-tags" id="tags-hr"></div>
-        </div>
-      </div>
-
-      <!-- Impresos Upload -->
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-title">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            Impresos XLSX
-          </div>
-          <span class="section-badge required">Requerido · Múltiples OK</span>
-        </div>
-        <div class="section-body">
-          <div class="drop-zone" id="dz-impresos" role="button" tabindex="0" aria-label="Cargar archivos Impresos">
-            <input type="file" id="file-impresos" accept=".xlsx,.xls" multiple aria-label="Seleccionar Impresos XLSX" />
-            <svg class="drop-zone-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            <span class="drop-zone-label">Click o arrastrar archivos Impresos</span>
-            <span class="drop-zone-hint">Podés seleccionar múltiples archivos a la vez</span>
-          </div>
-          <div class="file-tags" id="tags-impresos"></div>
-        </div>
-      </div>
-
-      <!-- Ce Upload -->
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-title">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-            Ce.xlsx — Concesionarios/Rutas
-          </div>
-          <span class="section-badge" style="background:var(--color-warning)">Opcional · XLSX o JSON</span>
-        </div>
-        <div class="section-body">
-          <div class="drop-zone" id="dz-ce" role="button" tabindex="0" aria-label="Cargar archivo Ce">
-            <input type="file" id="file-ce" accept=".xlsx,.xls,.json" aria-label="Seleccionar Ce XLSX o JSON" />
-            <svg class="drop-zone-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span class="drop-zone-label">Click o arrastrar Ce.xlsx o Ce.json</span>
-            <span class="drop-zone-hint">Columnas: Localidad | Ruta (o JSON array con los mismos campos)</span>
-          </div>
-          <div class="file-tags" id="tags-ce"></div>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="actions-row">
-        <button class="btn btn-accent btn-lg" id="btn-process" disabled>
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Procesar y Descargar
-        </button>
-        <button class="btn btn-danger" id="btn-clear">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-          Limpiar todo
-        </button>
-        <button class="btn btn-ghost" id="btn-instructions-toggle">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          Instrucciones
+  <body>
+    <div class="app-wrapper">
+      <!-- PWA Install Bar -->
+      <div class="install-bar" id="install-bar">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 2v13m0 0l-4-4m4 4l4-4" />
+          <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+        </svg>
+        <span>Instalar CEVA Zebra en este dispositivo</span>
+        <button class="btn btn-accent" id="btn-install">Instalar App</button>
+        <button
+          class="btn-icon"
+          id="btn-dismiss-install"
+          style="color: rgba(255, 255, 255, 0.6)"
+          aria-label="Cerrar"
+        >
+          <svg
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
         </button>
       </div>
 
-      <!-- Processing indicator -->
-      <div id="processing-indicator" class="hidden">
-        <div class="alert alert-info">
-          <div class="spinner" style="border-color:rgba(0,102,204,0.3);border-top-color:var(--color-accent);"></div>
-          <span id="processing-msg">Procesando archivos...</span>
-        </div>
-      </div>
-
-      <!-- Alerts from processing -->
-      <div class="alerts-container hidden" id="alerts-container"></div>
-
-      <!-- Result -->
-      <div id="result-section" class="hidden">
-        <div class="result-success">
-          <div class="result-count" id="result-count">0</div>
-          <h3>Etiquetas generadas</h3>
-          <p id="result-desc">El archivo XLSX se descargó automáticamente. Si no, usá el botón de abajo.</p>
-          <button class="btn btn-accent btn-lg" id="btn-download-again">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Descargar XLSX nuevamente
-          </button>
-        </div>
-
-        <!-- Preview table (collapsible) -->
-        <div class="section-card" style="margin-top:var(--space-4)">
-          <div class="section-header">
-            <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              Vista previa — primeras 50 filas
+      <!-- Header -->
+      <header class="app-header" role="banner">
+        <div class="header-inner">
+          <div class="header-brand">
+            <img class="header-logo" src="./assets/img/ceva-logo.jpg" alt="CEVA Logistics" />
+            <div class="header-title-group">
+              <span class="header-title">Tercer PASO</span>
+              <span class="header-subtitle">Creación de archivo para ZEBRA</span>
             </div>
-            <button class="collapsible-toggle" id="toggle-preview" aria-expanded="true">
-              <span>Ocultar</span>
-              <svg class="chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          </div>
+          <div class="header-actions">
+            <span class="header-badge">v2</span>
+            <button
+              class="btn-icon"
+              id="btn-theme"
+              aria-label="Cambiar tema"
+              data-theme-toggle
+              title="Cambiar tema claro/oscuro"
+            >
+              <!-- moon icon (dark mode shown by default) -->
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
             </button>
           </div>
-          <div class="collapsible-content" id="preview-content">
-            <div class="section-body" style="padding:0">
-              <div class="table-wrapper">
-                <table id="preview-table">
-                  <thead>
-                    <tr>
-                      <th>Referencia</th>
-                      <th>Handling Unit</th>
-                      <th>Destino</th>
-                      <th>Ciudad</th>
-                      <th>Ruta</th>
-                    </tr>
-                  </thead>
-                  <tbody id="preview-tbody"></tbody>
-                </table>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main class="main-content" role="main">
+        <!-- Instrucciones v2 -->
+        <div class="info-banner">
+          <div class="info-banner-icon">
+            <svg
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+          </div>
+          <div>
+            <h3>Cómo usar CEVA Zebra v2 (sin backend, 100% browser)</h3>
+            <p>
+              Esta versión funciona completamente en el navegador — no necesita servidor, Node.js ni
+              scripts .bat.
+            </p>
+            <ul class="info-steps">
+              <li data-n="1.">
+                El <strong>HR recomendado es XLSX</strong>. Exportá el romaneo desde el sistema como
+                Excel antes de cargarlo aquí. (El PDF no está soportado en esta versión estática).
+              </li>
+              <li data-n="2.">
+                Cargá uno o varios archivos <strong>Impresos XLSX</strong> (pueden ser múltiples
+                días).
+              </li>
+              <li data-n="3.">
+                Cargá el archivo <strong>Ce.xlsx o JSON</strong> con la tabla Localidad → Ruta.
+              </li>
+              <li data-n="4.">
+                Presioná <strong>Procesar</strong> — el resultado se descarga automáticamente como
+                XLSX.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Status row -->
+        <div class="status-row">
+          <div class="status-card">
+            <span class="status-label">HR (XLSX)</span>
+            <span class="status-value required-missing" id="status-hr">Sin archivo</span>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Impresos</span>
+            <span class="status-value required-missing" id="status-impresos">Sin archivos</span>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Ce / Rutas</span>
+            <span class="status-value" id="status-ce" style="color: var(--color-warning)"
+              >Opcional</span
+            >
+          </div>
+        </div>
+
+        <!-- HR Upload -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+              HR — Hoja de Ruta
+            </div>
+            <span class="section-badge required">Requerido · XLSX</span>
+          </div>
+          <div class="section-body">
+            <div
+              class="drop-zone"
+              id="dz-hr"
+              role="button"
+              tabindex="0"
+              aria-label="Cargar archivo HR"
+            >
+              <input
+                type="file"
+                id="file-hr"
+                accept=".xlsx,.xls"
+                aria-label="Seleccionar HR XLSX"
+              />
+              <svg
+                class="drop-zone-icon"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              <span class="drop-zone-label">Click o arrastrar HR.xlsx aquí</span>
+              <span class="drop-zone-hint"
+                >Solo XLSX · Máx 50MB · Esta v2 no soporta PDF (ver instrucciones arriba)</span
+              >
+            </div>
+            <div class="file-tags" id="tags-hr"></div>
+          </div>
+        </div>
+
+        <!-- Impresos Upload -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              Impresos XLSX
+            </div>
+            <span class="section-badge required">Requerido · Múltiples OK</span>
+          </div>
+          <div class="section-body">
+            <div
+              class="drop-zone"
+              id="dz-impresos"
+              role="button"
+              tabindex="0"
+              aria-label="Cargar archivos Impresos"
+            >
+              <input
+                type="file"
+                id="file-impresos"
+                accept=".xlsx,.xls"
+                multiple
+                aria-label="Seleccionar Impresos XLSX"
+              />
+              <svg
+                class="drop-zone-icon"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              <span class="drop-zone-label">Click o arrastrar archivos Impresos</span>
+              <span class="drop-zone-hint">Podés seleccionar múltiples archivos a la vez</span>
+            </div>
+            <div class="file-tags" id="tags-impresos"></div>
+          </div>
+        </div>
+
+        <!-- Ce Upload -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
+              </svg>
+              Ce.xlsx — Concesionarios/Rutas
+            </div>
+            <span class="section-badge" style="background: var(--color-warning)"
+              >Opcional · XLSX o JSON</span
+            >
+          </div>
+          <div class="section-body">
+            <div
+              class="drop-zone"
+              id="dz-ce"
+              role="button"
+              tabindex="0"
+              aria-label="Cargar archivo Ce"
+            >
+              <input
+                type="file"
+                id="file-ce"
+                accept=".xlsx,.xls,.json"
+                aria-label="Seleccionar Ce XLSX o JSON"
+              />
+              <svg
+                class="drop-zone-icon"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span class="drop-zone-label">Click o arrastrar Ce.xlsx o Ce.json</span>
+              <span class="drop-zone-hint"
+                >Columnas: Localidad | Ruta (o JSON array con los mismos campos)</span
+              >
+            </div>
+            <div class="file-tags" id="tags-ce"></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-row">
+          <button class="btn btn-accent btn-lg" id="btn-process" disabled>
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+            Procesar y Descargar
+          </button>
+          <button class="btn btn-danger" id="btn-clear">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14H6L5 6" />
+              <path d="M10 11v6M14 11v6" />
+              <path d="M9 6V4h6v2" />
+            </svg>
+            Limpiar todo
+          </button>
+          <button class="btn btn-ghost" id="btn-instructions-toggle">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+            Instrucciones
+          </button>
+        </div>
+
+        <!-- Processing indicator -->
+        <div id="processing-indicator" class="hidden">
+          <div class="alert alert-info">
+            <div
+              class="spinner"
+              style="border-color: rgba(0, 102, 204, 0.3); border-top-color: var(--color-accent)"
+            ></div>
+            <span id="processing-msg">Procesando archivos...</span>
+          </div>
+        </div>
+
+        <!-- Alerts from processing -->
+        <div class="alerts-container hidden" id="alerts-container"></div>
+
+        <!-- Result -->
+        <div id="result-section" class="hidden">
+          <div class="result-success">
+            <div class="result-count" id="result-count">0</div>
+            <h3>Etiquetas generadas</h3>
+            <p id="result-desc">
+              El archivo XLSX se descargó automáticamente. Si no, usá el botón de abajo.
+            </p>
+            <button class="btn btn-accent btn-lg" id="btn-download-again">
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Descargar XLSX nuevamente
+            </button>
+          </div>
+
+          <!-- Preview table (collapsible) -->
+          <div class="section-card" style="margin-top: var(--space-4)">
+            <div class="section-header">
+              <div class="section-title">
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M3 9h18M9 21V9" />
+                </svg>
+                Vista previa — primeras 50 filas
+              </div>
+              <button class="collapsible-toggle" id="toggle-preview" aria-expanded="true">
+                <span>Ocultar</span>
+                <svg
+                  class="chevron"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline points="18 15 12 9 6 15" />
+                </svg>
+              </button>
+            </div>
+            <div class="collapsible-content" id="preview-content">
+              <div class="section-body" style="padding: 0">
+                <div class="table-wrapper">
+                  <table id="preview-table">
+                    <thead>
+                      <tr>
+                        <th>Referencia</th>
+                        <th>Handling Unit</th>
+                        <th>Destino</th>
+                        <th>Ciudad</th>
+                        <th>Ruta</th>
+                      </tr>
+                    </thead>
+                    <tbody id="preview-tbody"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Instrucciones detalladas (collapsible) -->
-      <div class="section-card hidden" id="instructions-panel">
-        <div class="section-header">
-          <div class="section-title">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-            Instrucciones y Lógica de Procesamiento
+        <!-- Instrucciones detalladas (collapsible) -->
+        <div class="section-card hidden" id="instructions-panel">
+          <div class="section-header">
+            <div class="section-title">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+              </svg>
+              Instrucciones y Lógica de Procesamiento
+            </div>
+          </div>
+          <div
+            class="section-body"
+            style="display: flex; flex-direction: column; gap: var(--space-4)"
+          >
+            <div>
+              <h4
+                style="font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2)"
+              >
+                Formato del HR XLSX
+              </h4>
+              <p style="font-size: var(--text-xs); color: var(--color-text-muted)">
+                El HR debe tener columnas: <strong>Nº Factura</strong>,
+                <strong>Destinatario</strong>, <strong>Ciudad Destinatario</strong>. La detección es
+                flexible — se normalizan nombres de columnas (sin tildes, minúsculas). Si el sistema
+                genera PDF, primero exportalo como XLSX desde Excel o el propio sistema.
+              </p>
+            </div>
+            <div>
+              <h4
+                style="font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2)"
+              >
+                Formato de Impresos XLSX
+              </h4>
+              <p style="font-size: var(--text-xs); color: var(--color-text-muted)">
+                Deben tener columnas <strong>Remito</strong> y <strong>Handling Unit</strong> (o
+                variantes: Referencia, HU, Unidad). Se aceptan múltiples archivos — se concatenan
+                automáticamente.
+              </p>
+            </div>
+            <div>
+              <h4
+                style="font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2)"
+              >
+                Derivar Nº Factura desde Remito
+              </h4>
+              <p style="font-size: var(--text-xs); color: var(--color-text-muted)">
+                Ej:
+                <code
+                  style="
+                    font-family: var(--font-mono);
+                    background: var(--color-surface-off);
+                    padding: 1px 4px;
+                    border-radius: 3px;
+                  "
+                  >0300-00018664</code
+                >
+                →
+                <code
+                  style="
+                    font-family: var(--font-mono);
+                    background: var(--color-surface-off);
+                    padding: 1px 4px;
+                    border-radius: 3px;
+                  "
+                  >18664</code
+                >
+                (se quita el prefijo antes del guion y los ceros a la izquierda).
+              </p>
+            </div>
+            <div>
+              <h4
+                style="font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2)"
+              >
+                Merge y deduplicación
+              </h4>
+              <p style="font-size: var(--text-xs); color: var(--color-text-muted)">
+                1. Impresos → derivan Nº Factura. 2. HR → lookup por Nº Factura para obtener
+                Destinatario y Ciudad. 3. Ce → lookup por Ciudad normalizada para obtener Ruta. 4.
+                Se desduplicada por Handling Unit. 5. Se generan alertas si hay facturas en HR sin
+                match en Impresos o viceversa.
+              </p>
+            </div>
+            <div>
+              <h4
+                style="font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2)"
+              >
+                Ce.xlsx formato
+              </h4>
+              <p style="font-size: var(--text-xs); color: var(--color-text-muted)">
+                Primera hoja con columnas <strong>Localidad</strong> y <strong>Ruta</strong>.
+                Alternativa: JSON array con
+                <code
+                  style="
+                    font-family: var(--font-mono);
+                    background: var(--color-surface-off);
+                    padding: 1px 4px;
+                    border-radius: 3px;
+                  "
+                  >[{"localidad":"CORDOBA","ruta":"R1"}]</code
+                >
+              </p>
+            </div>
           </div>
         </div>
-        <div class="section-body" style="display:flex;flex-direction:column;gap:var(--space-4)">
-          <div>
-            <h4 style="font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-2)">Formato del HR XLSX</h4>
-            <p style="font-size:var(--text-xs);color:var(--color-text-muted)">El HR debe tener columnas: <strong>Nº Factura</strong>, <strong>Destinatario</strong>, <strong>Ciudad Destinatario</strong>. La detección es flexible — se normalizan nombres de columnas (sin tildes, minúsculas). Si el sistema genera PDF, primero exportalo como XLSX desde Excel o el propio sistema.</p>
-          </div>
-          <div>
-            <h4 style="font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-2)">Formato de Impresos XLSX</h4>
-            <p style="font-size:var(--text-xs);color:var(--color-text-muted)">Deben tener columnas <strong>Remito</strong> y <strong>Handling Unit</strong> (o variantes: Referencia, HU, Unidad). Se aceptan múltiples archivos — se concatenan automáticamente.</p>
-          </div>
-          <div>
-            <h4 style="font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-2)">Derivar Nº Factura desde Remito</h4>
-            <p style="font-size:var(--text-xs);color:var(--color-text-muted)">Ej: <code style="font-family:var(--font-mono);background:var(--color-surface-off);padding:1px 4px;border-radius:3px">0300-00018664</code> → <code style="font-family:var(--font-mono);background:var(--color-surface-off);padding:1px 4px;border-radius:3px">18664</code> (se quita el prefijo antes del guion y los ceros a la izquierda).</p>
-          </div>
-          <div>
-            <h4 style="font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-2)">Merge y deduplicación</h4>
-            <p style="font-size:var(--text-xs);color:var(--color-text-muted)">1. Impresos → derivan Nº Factura. 2. HR → lookup por Nº Factura para obtener Destinatario y Ciudad. 3. Ce → lookup por Ciudad normalizada para obtener Ruta. 4. Se desduplicada por Handling Unit. 5. Se generan alertas si hay facturas en HR sin match en Impresos o viceversa.</p>
-          </div>
-          <div>
-            <h4 style="font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-2)">Ce.xlsx formato</h4>
-            <p style="font-size:var(--text-xs);color:var(--color-text-muted)">Primera hoja con columnas <strong>Localidad</strong> y <strong>Ruta</strong>. Alternativa: JSON array con <code style="font-family:var(--font-mono);background:var(--color-surface-off);padding:1px 4px;border-radius:3px">[{"localidad":"CORDOBA","ruta":"R1"}]</code></p>
-          </div>
-        </div>
-      </div>
+      </main>
 
-    </main>
+      <!-- Footer -->
+      <footer class="app-footer">
+        <p class="footer-text">
+          CEVA Logistics — Zebra Control de Etiquetas v2 &nbsp;·&nbsp; 100% client-side, sin backend
+          &nbsp;·&nbsp;
+          <a href="./README.md" target="_blank" rel="noopener">README / Limitaciones</a>
+        </p>
+      </footer>
+    </div>
 
-    <!-- Footer -->
-    <footer class="app-footer">
-      <p class="footer-text">
-        CEVA Logistics — Zebra Control de Etiquetas v2 &nbsp;·&nbsp;
-        100% client-side, sin backend &nbsp;·&nbsp;
-        <a href="./README.md" target="_blank" rel="noopener">README / Limitaciones</a>
-      </p>
-    </footer>
-  </div>
+    <!-- Toast container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
-  <!-- Toast container -->
-  <div class="toast-container" id="toast-container" aria-live="polite"></div>
-
-  <!-- ===== APPLICATION LOGIC ===== -->
-  <script src="./assets/js/app.js"></script>
-</body>
+    <!-- ===== APPLICATION LOGIC ===== -->
+    <script src="./assets/js/app.js"></script>
+  </body>
 </html>
