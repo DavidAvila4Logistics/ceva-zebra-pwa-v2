@@ -144,9 +144,30 @@
     const ws = wb.Sheets[wb.SheetNames[0]];
     const raw = XLSX.utils.sheet_to_json(ws, { defval: "" });
     const normalized = normalizeColNames(raw);
+
+    // El Ce real trae la ciudad limpia dentro de "CONCA_CE_LOC" (formato
+    // "CLIENTE - CIUDAD"); la columna "LOCALIDAD" es una clave interna sucia
+    // con prefijos de cliente (p. ej. "CASTRO RAFAELA"), que casi nunca matchea
+    // con la "Ciudad Destinatario" del HR. Si existe CONCA_CE_LOC, derivamos la
+    // ciudad de ahí; si no, caemos al formato simple documentado (Localidad/Ruta).
+    const hasConca = normalized.length && "conca_ce_loc" in normalized[0];
+
+    const cityFromConca = (val) => {
+      // Algunos separadores usan espacio no separable (\xa0) en vez de espacio.
+      const s = stripStr(val).replace(/ /g, " ");
+      // La ciudad es el texto tras el último "-" (las ciudades no llevan "-";
+      // los nombres de cliente sí pueden tener espacios/puntos).
+      const idx = s.lastIndexOf("-");
+      return idx >= 0 ? s.slice(idx + 1) : s;
+    };
+
     return normalized
       .map((row) => ({
-        localidad: normalizeStr(stripStr(row["localidad"] || row["ciudad"] || "")),
+        localidad: normalizeStr(
+          hasConca
+            ? cityFromConca(row["conca_ce_loc"])
+            : stripStr(row["localidad"] || row["ciudad"] || "")
+        ),
         ruta: stripStr(row["ruta"] || ""),
       }))
       .filter((r) => r.localidad);

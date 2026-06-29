@@ -4,7 +4,7 @@
  * Compatible con GitHub Pages (sin backend).
  */
 
-const CACHE_NAME = "ceva-zebra-v2-cache-v3";
+const CACHE_NAME = "ceva-zebra-v2-cache-v4";
 
 // Assets to pre-cache on install
 const PRECACHE_ASSETS = [
